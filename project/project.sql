@@ -123,3 +123,10 @@ FOREIGN KEY(class_name) REFERENCES Class(name),
 FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
 -- mandatory certification side
 );
+
+CREATE TABLE country(
+	iso_code CHAR(3),
+	name VARCHAR(60) NOT NULL,
+	flag VARCHAR(300),
+	PRIMARY KEY(iso_code)
+)
