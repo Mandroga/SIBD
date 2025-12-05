@@ -155,3 +155,24 @@ CREATE TABLE national_jurisdiction(
 	FOREIGN KEY(name) REFERENCES jurisdiction(name),
 	FOREIGN KEY(country_code) REFERENCES country(iso_code)
 )
+
+CREATE TABLE is_skipper_for(
+	sid INTEGER,
+	cni INTEGER,
+    start_date DATE,
+    take_off_date DATE,
+    PRIMARY KEY(sid, cni, start_date, take_off_date),
+    FOREIGN KEY(sid) REFERENCES sailor(sid),
+    FOREIGN KEY(cni, start_date, take_off_date) REFERENCES trip(cni, start_date, take_off_date)
+)   
+
+CREATE TABLE records(
+    cni INTEGER,
+    start_date DATE,
+    take_off_date DATE,
+    sequence INTEGER,
+    jurisdiction_name VARCHAR(50),
+    PRIMARY KEY(cni, start_date, take_off_date, jurisdiction_name),
+    FOREIGN KEY(cni, start_date, take_off_date) REFERENCES trip(cni, start_date, take_off_date),
+    FOREIGN KEY(jurisdiction_name) REFERENCES jurisdiction(name)
+)
