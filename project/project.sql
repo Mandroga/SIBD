@@ -130,3 +130,28 @@ CREATE TABLE country(
 	flag VARCHAR(300),
 	PRIMARY KEY(iso_code)
 )
+
+CREATE TABLE class(
+	name VARCHAR(15),
+	max_length(6,2) NOT NULL,
+	PRIMARY KEY(name)
+)
+
+CREATE TABLE jurisdiction(
+	name VARCHAR(50),
+	PRIMARY KEY(name)
+)
+
+CREATE TABLE international_jurisdiction(
+	name VARCHAR(50),
+	PRIMARY KEY(name),
+	FOREIGN KEY(name) REFERENCES jurisdiction(name)
+)
+
+CREATE TABLE national_jurisdiction(
+	name VARCHAR(50),
+	country_code CHAR(3) NOT NULL,
+	PRIMARY KEY(name),
+	FOREIGN KEY(name) REFERENCES jurisdiction(name),
+	FOREIGN KEY(country_code) REFERENCES country(iso_code)
+)
