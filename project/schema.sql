@@ -50,10 +50,8 @@ CREATE TABLE Certification -- TYPE! A certification is the permitions the sailor
 sid INTEGER,
 issue_date DATE,
 expiry_date DATE NOT NULL,
-for_class_name VARCHAR(80),
 PRIMARY KEY(sid, issue_date),
 FOREIGN KEY(sid) REFERENCES Sailor(sid),
-FOREIGN KEY (for_class_name) REFERENCES Class(name)
 );
 
 CREATE TABLE Reservation -- IC4, IC6, IC12, IC13, IC15 IC!
@@ -138,9 +136,11 @@ CREATE TABLE enables(
     sid INTEGER,
     issue_date DATE,
     name VARCHAR(80),
-    PRIMARY KEY (sid, issue_date, name),
+    class_name VARCHAR(80),
+    PRIMARY KEY (sid, issue_date, name, class_name),
     FOREIGN KEY (sid, issue_date) REFERENCES Certification(sid, issue_date),
-    FOREIGN KEY (name) REFERENCES Jurisdiction(name)
+    FOREIGN KEY (name) REFERENCES Jurisdiction(name),
+    FOREIGN KEY (class_name) REFERENCES Class(name)
     -- Every certification must have at least one Jurisdiction defined
 );
 
