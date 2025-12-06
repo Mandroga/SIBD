@@ -101,7 +101,6 @@ CREATE TABLE starts_ends -- MANDATORY!
 cni VARCHAR(25),
 start_date DATE,
 take_off_date DATE,
-
 start_long NUMERIC(9,6),
 end_long NUMERIC(9,6),
 start_lat NUMERIC(8,6),
@@ -117,8 +116,8 @@ CREATE TABLE for -- IC!, MANDATORY!, IC9, IC10
 (
 sid INTEGER,
 issue_date DATE,
-class_name VARCHAR(255),
-jurisdiction_name VARCHAR(255),
+class_name VARCHAR(80),
+jurisdiction_name VARCHAR(80),
 PRIMARY KEY(sid, issue_date, class_name, jurisdiction_name),
 FOREIGN KEY(sid, issue_date) REFERENCES Certification(sid, issue_date),
 FOREIGN KEY(class_name) REFERENCES Class(name),
@@ -129,33 +128,35 @@ FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
 CREATE TABLE country(
 	iso_code VARCHAR(5),
 	name VARCHAR(60) NOT NULL,
-	flag VARCHAR(300),
+	flag VARCHAR(2083) NOT NULL,
+    UNIQUE(name),
+    UNIQUE (flag),
 	PRIMARY KEY(iso_code)
 )
 
-CREATE TABLE class(
-	name VARCHAR(15),
+CREATE TABLE Class(
+	name VARCHAR(80),
 	max_length(6,2) NOT NULL,
 	PRIMARY KEY(name)
 )
 
-CREATE TABLE jurisdiction(
-	name VARCHAR(50),
+CREATE TABLE Jurisdiction(
+	name VARCHAR(80),
 	PRIMARY KEY(name)
 )
 
-CREATE TABLE international_jurisdiction(
-	name VARCHAR(50),
+CREATE TABLE International_Jurisdiction(
+	name VARCHAR(80),
 	PRIMARY KEY(name),
-	FOREIGN KEY(name) REFERENCES jurisdiction(name)
+	FOREIGN KEY(name) REFERENCES Jurisdiction(name)
 )
 
-CREATE TABLE national_jurisdiction(
-	name VARCHAR(50),
-	country_code CHAR(3) NOT NULL,
+CREATE TABLE National_Jurisdiction(
+	name VARCHAR(80),
+	belongs_to_iso VARCHAR(5),
 	PRIMARY KEY(name),
-	FOREIGN KEY(name) REFERENCES jurisdiction(name),
-	FOREIGN KEY(country_code) REFERENCES country(iso_code)
+	FOREIGN KEY(name) REFERENCES Jurisdiction(name),
+	FOREIGN KEY(belongs_to_iso) REFERENCES Country(iso_code)
 )
 
 CREATE TABLE is_skipper_for(
@@ -166,6 +167,7 @@ CREATE TABLE is_skipper_for(
     PRIMARY KEY(sid, cni, start_date, take_off_date),
     FOREIGN KEY(sid) REFERENCES sailor(sid),
     FOREIGN KEY(cni, start_date, take_off_date) REFERENCES trip(cni, start_date, take_off_date)
+    -- Mandatory aaaa
 )   
 
 CREATE TABLE records(
@@ -173,8 +175,9 @@ CREATE TABLE records(
     start_date DATE,
     take_off_date DATE,
     sequence INTEGER,
-    jurisdiction_name VARCHAR(50),
+    jurisdiction_name VARCHAR(80),
     PRIMARY KEY(cni, start_date, take_off_date, jurisdiction_name),
     FOREIGN KEY(cni, start_date, take_off_date) REFERENCES trip(cni, start_date, take_off_date),
     FOREIGN KEY(jurisdiction_name) REFERENCES jurisdiction(name)
+    -- MANDATORYYYY
 )
