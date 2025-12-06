@@ -58,8 +58,8 @@ end_date DATE NOT NULL,
 responsible_for_sid INTEGER,
 PRIMARY KEY(cni, start_date),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
-FOREIGN KEY(responsible_for_sid) REFERENCES Sailor(sid), -- IC4
-CHECK (start_date <= end_date) -- IC12
+FOREIGN KEY(responsible_for_sid) REFERENCES Senior(sid), -- IC4
+-- CHECK (start_date <= end_date) -- IC12
 );
 
 CREATE TABLE authorized_for -- MANDATORY! IC! IC5
@@ -78,10 +78,12 @@ CREATE TABLE Trip -- IC! IC6, IC11, IC14, IC15
 cni INTEGER,
 start_date DATE,
 take_off_date DATE,
-arrival_date DATE,
-ins_ref INTEGER,
+arrival_date DATE NOT NULL,
+ins_ref INTEGER NOT NULL,
 PRIMARY KEY(cni, start_date, take_off_date),
-CHECK (take_off_date <= arrival_date)
+FOREIGN KEY (cni) REFERENCES Boat(cni),---???
+FOREIGN KEY (start_date) REFERENCES Reservation(start_date), ----?
+--CHECK (take_off_date <= arrival_date)
 );
 
 CREATE TABLE registers -- TYPE! MANDATORY! IC! IC8
