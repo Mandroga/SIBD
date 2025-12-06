@@ -53,12 +53,4 @@ WHERE s.sid = e.sid
 AND e.class_name = b.of_class_name
 );
 
-SELECT * FROM certification;
-SELECT * FROM Trip;
-SELECT * FROM Boat;
-SELECT * FROM Reservation;
-SELECT * FROM authorized_for;
-SELECT * FROM enables;
-
--- Boat class except Certified class ?
 
