@@ -82,8 +82,10 @@ start_date DATE,
 take_off_date DATE,
 arrival_date DATE NOT NULL,
 ins_ref INTEGER NOT NULL,
+is_skipper_for_id INTEGER,
 PRIMARY KEY(cni, start_date, take_off_date),
 FOREIGN KEY (cni, start_date) REFERENCES Reservation(cni,start_date),
+FOREIGN KEY (is_skipper_for_id) REFERENCES Sailor(sid)
 --CHECK (take_off_date <= arrival_date)
 );
 
@@ -160,17 +162,6 @@ CREATE TABLE National_Jurisdiction(
 	FOREIGN KEY(name) REFERENCES Jurisdiction(name),
 	FOREIGN KEY(belongs_to_iso) REFERENCES Country(iso_code)
 )
-
-CREATE TABLE is_skipper_for(
-	sid INTEGER,
-	cni VARCHAR(25),
-    start_date DATE,
-    take_off_date DATE,
-    PRIMARY KEY(sid, cni, start_date, take_off_date),
-    FOREIGN KEY(sid) REFERENCES sailor(sid),
-    FOREIGN KEY(cni, start_date, take_off_date) REFERENCES trip(cni, start_date, take_off_date)
-    -- Mandatory aaaa
-)   
 
 CREATE TABLE records(
     cni VARCHAR(25),
