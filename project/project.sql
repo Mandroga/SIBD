@@ -48,8 +48,10 @@ CREATE TABLE Certification -- TYPE! A certification is the permitions the sailor
 sid INTEGER,
 issue_date DATE,
 expiry_date DATE NOT NULL,
+for_class_name VARCHAR(80),
 PRIMARY KEY(sid, issue_date),
-FOREIGN KEY(sid) REFERENCES Sailor(sid)
+FOREIGN KEY(sid) REFERENCES Sailor(sid),
+FOREIGN KEY (for_class_name) REFERENCES Class(name)
 );
 
 CREATE TABLE Reservation -- IC4, IC6, IC12, IC13, IC15 IC!
@@ -116,18 +118,6 @@ FOREIGN KEY (end_long, end_lat) REFERENCES Location(long,lat)
 -- mandatory trip side
 );
 
-CREATE TABLE for -- IC!, MANDATORY!, IC9, IC10
-(
-sid INTEGER,
-issue_date DATE,
-class_name VARCHAR(80),
-jurisdiction_name VARCHAR(80),
-PRIMARY KEY(sid, issue_date, class_name, jurisdiction_name),
-FOREIGN KEY(sid, issue_date) REFERENCES Certification(sid, issue_date),
-FOREIGN KEY(class_name) REFERENCES Class(name),
-FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
--- mandatory certification side
-);
 
 CREATE TABLE Country(
 	iso_code VARCHAR(5),
@@ -147,6 +137,15 @@ CREATE TABLE Class(
 CREATE TABLE Jurisdiction(
 	name VARCHAR(80),
 	PRIMARY KEY(name)
+)
+
+CREATE TABLE enables(
+    sid INTEGER,
+    issue_date DATE,
+    name VARCHAR(80),
+    PRIMARY KEY (sid, issue_date, name),
+    FOREIGN KEY (sid, issue_date) REFERENCES Certification(sid, issue_date),
+    FOREIGN KEY (name) REFERENCES Jurisdiction(name)
 )
 
 CREATE TABLE International_Jurisdiction(
