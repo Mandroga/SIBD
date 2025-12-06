@@ -75,20 +75,20 @@ INSERT INTO Senior_Sailor(sid) VALUES
 -- Certifications (valid & expired)
 ---------------------------------------
 -- Bruno: valid (multi-jurisdiction)
-INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(2, DATE '2023-01-01', DATE '2026-12-31', 'Class 1');
+INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
+(2, DATE '2023-01-01', DATE '2026-12-31');
 
 -- Bruno: old expired
-INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(2, DATE '2020-01-01', DATE '2020-12-31', 'Class 2');
+INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
+(2, DATE '2020-01-01', DATE '2020-12-31');
 
 -- Carla
-INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(3, DATE '2022-06-15', DATE '2025-06-14', 'Class 3');
+INSERT INTO Certification(sid, issue_date, expiry_date ) VALUES
+(3, DATE '2022-06-15', DATE '2025-06-14');
 
 -- Ana (junior)
-INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(1, DATE '2024-03-01', DATE '2024-09-30', 'Class 4');
+INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
+(1, DATE '2024-03-01', DATE '2024-09-30');
 
 ---------------------------------------
 -- enables (Certification ↔ Jurisdictions)
@@ -99,29 +99,32 @@ INSERT INTO enables(sid, issue_date, name) VALUES
 (2, DATE '2023-01-01', 'Portugal Territorial Waters'),
 (2, DATE '2023-01-01', 'Portugal EEZ'),
 (2, DATE '2023-01-01', 'Portugal Internal Waters'),
-(2, DATE '2023-01-01', 'Douro River'),
+(2, DATE '2023-01-01', 'Douro River');
 
 -- Bruno, expired certification
 INSERT INTO enables(sid, issue_date, name) VALUES
 (2, DATE '2020-01-01', 'Portuguese Internal Waters');
 
--- Carla, Cruiser 40, international + UK waters
+-- Carla
 INSERT INTO enables(sid, issue_date, name) VALUES
 (3, DATE '2022-06-15', 'International Waters'),
-(3, DATE '2022-06-15', 'UK Territorial Waters');
+(3, DATE '2022-06-15', 'Spain EEZ'),
+(3, DATE '2022-06-15', 'Spain Territorial Waters'),
+(3, DATE '2022-06-15', 'Spain Internal Waters'),
+(3, DATE '2022-06-15', 'Spain Tejo River');
 
--- Ana, Optimist, river only
+-- Ana (junior)
 INSERT INTO enables(sid, issue_date, name) VALUES
-(1, DATE '2024-03-01', 'Douro River');
+(1, DATE '2024-03-01', 'Portuguese Internal Waters');
 
 ---------------------------------------
 -- Boats (one without class to test NULL of_class_name)
 ---------------------------------------
 INSERT INTO Boat(cni, picture_path, length, name, of_class_name) VALUES
-('PT-BOAT-001', '/img/boats/pt-boat-001.jpg',  9.30, 'Lusitania',      'Cruiser 30'),
-('PT-BOAT-002', '/img/boats/pt-boat-002.jpg', 11.80, 'Atlantico',      'Cruiser 40'),
-('PT-BOAT-003', '/img/boats/pt-boat-003.jpg',  5.50, 'Gaivota',        'Dinghy'),
-('BM-BOAT-004', '/img/boats/bm-boat-004.jpg',  9.20, 'Ocean Breeze',   NULL);
+('PT-BOAT-001', 'https://picsum.photos/seed/lusi/800/600', 9.30, 'Lusitania', 'Class 3'),
+('PT-BOAT-002', 'https://placekitten.com/800/600', 11.80, 'Atlantico', 'Class 4'),
+('PT-BOAT-003', 'https://via.placeholder.com/800x600?text=Gaivota', 5.50, 'Gaivota', 'Class 2'),
+('BM-BOAT-004', 'https://picsum.photos/seed/oceanbreeze/800/600', 9.20, 'Ocean Breeze', NULL);
 
 ---------------------------------------
 -- Reservations (including overlaps and unused)
