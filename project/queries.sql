@@ -29,28 +29,28 @@ WHERE b_filtered.registered_iso = 'PRT';
 -- D. The full name of all skippers without any certificate corresponding to the class of the trip’s boat.
 
 -- Sailor - sid, first_name, surname
--- Boat - cni, of_class_name
+-- Boat - cni, class_name
 -- Trip - cni,start_date, take_off_date, is_skipper_for(sid(Sailor), start_date(Reservation))
 -- enables - sid, issue_date, jurisdiction_name, class_name
 
 SELECT DISTINCT sid, first_name, surname -- so funciona se permitir row value expressions; problemas com nulls - chatgpt
 FROM Trip AS t
 JOIN Boat AS b ON t.cni = b.cni
-JOIN Sailor AS s ON t.is_skipper_for_id = s.sid
-WHERE (s.sid, b.of_class_name)
+JOIN Sailor AS s ON t.is_skipper_for_sid = s.sid
+WHERE (s.sid, b.class_name)
 NOT IN (SELECT sid, class_name FROM enables)
 ;
 
 SELECT DISTINCT s.sid, first_name, surname
 FROM Sailor AS s
-JOIN Trip AS t ON s.sid = t.is_skipper_for_id
+JOIN Trip AS t ON s.sid = t.is_skipper_for_sid
 JOIN Boat AS b ON t.cni = b.cni
 WHERE NOT EXISTS
 (
 SELECT 1
 FROM enables AS e
 WHERE s.sid = e.sid
-AND e.class_name = b.of_class_name
+AND e.class_name = b.class_name
 );
 
 

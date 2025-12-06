@@ -19,7 +19,8 @@ CREATE TABLE Country(
 CREATE TABLE Class(
 	name VARCHAR(80),
 	max_length NUMERIC(6,2) NOT NULL,
-	PRIMARY KEY(name)
+	PRIMARY KEY(name),
+    UNIQUE(name, max_length)
 );
 
 CREATE TABLE Boat -- TYPE!
@@ -78,9 +79,11 @@ cni VARCHAR(25),
 start_date DATE,
 end_date DATE NOT NULL,
 PRIMARY KEY(cni, start_date),
+UNIQUE(cni, start_date, end_date),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
 CHECK(start_date <= end_date) --IC12
 );
+
 
 CREATE TABLE authorized_for -- MANDATORY! IC! IC5
 (
@@ -145,6 +148,7 @@ CHECK(take_off_date <= arrival_date) -- IC14
 --);
 --
 
+
 CREATE TABLE starts_ends -- MANDATORY!
 (
 cni VARCHAR(25),
@@ -169,6 +173,8 @@ FOREIGN KEY (end_long, end_lat) REFERENCES Location(long,lat)
 
 
 
+
+
 CREATE TABLE Jurisdiction(
 	name VARCHAR(80),
 	PRIMARY KEY(name)
@@ -185,7 +191,6 @@ CREATE TABLE enables(
     FOREIGN KEY (class_name) REFERENCES Class(name)
     -- Every certification must have at least one Jurisdiction defined
 );
-DROP TABLE enables;
 
 CREATE TABLE International_Jurisdiction(
 	name VARCHAR(80),
@@ -226,6 +231,5 @@ CREATE TABLE define(
     -- Every country that registers a boat must have
     -- at least one location defined.
 );
-
 
 -- NAZARE
