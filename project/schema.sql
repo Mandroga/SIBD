@@ -1,5 +1,5 @@
--- MANDATORY!, TYPE!, IC!
-CREATE TABLE Location -- TYPE!
+
+CREATE TABLE Location 
 (
 long NUMERIC(8,6),
 lat NUMERIC(9,6),
@@ -49,31 +49,34 @@ PRIMARY KEY(sid),
 UNIQUE(email) --IC1
 );
 
-CREATE TABLE Junior_Sailor -- Sailor disjoint specialization
+CREATE TABLE Junior_Sailor
 (
 sid INTEGER,
 PRIMARY KEY(sid),
 FOREIGN KEY(sid) REFERENCES Sailor(sid)
 );
 
-CREATE TABLE Senior_Sailor -- Sailor disjoint specialization
+CREATE TABLE Senior_Sailor
 (
 sid INTEGER,
 PRIMARY KEY(sid),
 FOREIGN KEY(sid) REFERENCES Sailor(sid)
 );
 
-CREATE TABLE Certification -- TYPE! A certification is the permitions the sailor has during valid dates for skipping with the given combination of class and jurisdictions
--- IC9, IC10, IC11
+CREATE TABLE Certification 
 (
 sid INTEGER,
 issue_date DATE,
 expiry_date DATE NOT NULL,
 PRIMARY KEY(sid, issue_date),
 FOREIGN KEY(sid) REFERENCES Sailor(sid)
+-- IC9:
+-- The sailor that is skipper for a trip must
+-- hold a certification for the class of the boat
+-- used on the reservation which the trip is associated to.
 );
 
-CREATE TABLE Reservation -- IC4, IC6, IC12, IC13, IC15 IC!
+CREATE TABLE Reservation 
 (
 cni VARCHAR(25),
 start_date DATE,
@@ -85,7 +88,7 @@ CHECK(start_date <= end_date) --IC12
 );
 
 
-CREATE TABLE authorized_for -- MANDATORY! IC! IC5
+CREATE TABLE authorized_for 
 (
 cni VARCHAR(25),
 start_date DATE,
@@ -109,7 +112,7 @@ FOREIGN KEY (responsible_sid) REFERENCES Senior_Sailor(sid)
 -- Every reservation must have at least one responsible senior sailor
 );
 
-CREATE TABLE Trip -- IC! IC6, IC11, IC14, IC15
+CREATE TABLE Trip 
 (
 cni VARCHAR(25),
 start_date DATE,
@@ -129,6 +132,11 @@ CHECK(start_date = is_skipper_for_start_date), --IC5
 CHECK(take_off_date BETWEEN start_date AND end_date), -- IC6
 CHECK(arrival_date BETWEEN start_date AND end_date), --IC6
 CHECK(take_off_date <= arrival_date) -- IC14
+
+-- IC9:
+-- The sailor that is skipper for a trip must
+-- hold a certification for the class of the boat
+-- used on the reservation which the trip is associated to.
 );
 
 
