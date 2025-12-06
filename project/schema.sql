@@ -74,11 +74,19 @@ CREATE TABLE Reservation -- IC4, IC6, IC12, IC13, IC15 IC!
 cni VARCHAR(25),
 start_date DATE,
 end_date DATE NOT NULL,
-responsible_for_sid INTEGER,
 PRIMARY KEY(cni, start_date),
-FOREIGN KEY(cni) REFERENCES Boat(cni),
-FOREIGN KEY(responsible_for_sid) REFERENCES Senior_Sailor(sid)
--- CHECK (start_date <= end_date) -- IC12
+FOREIGN KEY(cni) REFERENCES Boat(cni)
+);
+
+CREATE TABLE authorized_for -- MANDATORY! IC! IC5
+(
+cni VARCHAR(25),
+start_date DATE,
+sid INTEGER,
+PRIMARY KEY(cni, start_date, sid),
+FOREIGN KEY(sid) REFERENCES Sailor(sid),
+FOREIGN KEY(cni, start_date) REFERENCES Reservation(cni, start_date)
+-- Mandatory reservation side
 );
 
 CREATE TABLE responsible_for
@@ -87,20 +95,10 @@ cni VARCHAR(25),
 start_date DATE,
 responsible_sid INTEGER,
 PRIMARY KEY(cni, start_date, responsible_sid),
-FOREIGN KEY(cni, start_date) REFERENCES Reservation(cni, start_date),
-FOREIGN KEY(responsible_sid) REFERENCES Senior_Sailor(sid)
-);
-DROP TABLE responsible_for;
-
-CREATE TABLE authorized_for -- MANDATORY! IC! IC5
-(
-cni VARCHAR(25),
-start_date DATE,
-sid INTEGER,
-PRIMARY KEY(sid, cni, start_date),
-FOREIGN KEY(sid) REFERENCES Sailor(sid),
-FOREIGN KEY(cni, start_date) REFERENCES Reservation(cni, start_date)
--- Mandatory reservation side
+FOREIGN KEY (cni, start_date, responsible_sid) REFERENCES authorized_for(cni, start_date, sid),  -- IC4 - enforces the person is authorized for that reservation
+FOREIGN KEY (cni, start_date) REFERENCES Reservation(cni, start_date),
+FOREIGN KEY (responsible_sid) REFERENCES Senior_Sailor(sid)
+-- Every reservation must have at least one responsible senior sailor
 );
 
 CREATE TABLE Trip -- IC! IC6, IC11, IC14, IC15
