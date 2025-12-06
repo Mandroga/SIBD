@@ -118,36 +118,49 @@ INSERT INTO enables(sid, issue_date, name, class_name) VALUES
 (1, DATE '2024-03-01', 'Portuguese Internal Waters', 'Class 1');
 
 ---------------------------------------
--- Boats (one without class to test NULL of_class_name)
+-- Boats (one without class to test NULL class_name)
 ---------------------------------------
-INSERT INTO Boat(cni, picture_path, length, name, of_class_name, registered_iso) VALUES
-('PT-BOAT-001', 'https://picsum.photos/seed/lusi/800/600', 9.30, 'Lusitania', 'Class 3','PTR'),
-('PT-BOAT-002', 'https://placekitten.com/800/600', 11.80, 'Atlantico', 'Class 4', 'PTR'),
-('PT-BOAT-003', 'https://via.placeholder.com/800x600?text=Gaivota', 5.50, 'Gaivota', 'Class 2', 'PTR'),
-('BM-BOAT-004', 'https://picsum.photos/seed/oceanbreeze/800/600', 9.20, 'Ocean Breeze', NULL, 'BMU');
+INSERT INTO Boat(cni, picture_path, length, name, class_name, registered_iso, class_max_length) VALUES
+('PT-BOAT-001', 'https://picsum.photos/seed/lusi/800/600', 9.30, 'Lusitania', 'Class 3','PTR',9.50),
+('PT-BOAT-002', 'https://placekitten.com/800/600', 11.80, 'Atlantico', 'Class 4', 'PTR',12.00),
+('PT-BOAT-003', 'https://via.placeholder.com/800x600?text=Gaivota', 5.50, 'Gaivota', 'Class 2', 'PTR',6.00),
+('BM-BOAT-004', 'https://picsum.photos/seed/oceanbreeze/800/600', 9.20, 'Ocean Breeze', NULL, 'BMU', NULL);
+
 
 ---------------------------------------
 -- Reservations (including overlaps and unused)
 ---------------------------------------
 -- Lusitania: long reservation, many authorized sailors, one main trip
-INSERT INTO Reservation(cni, start_date, end_date, responsible_for_sid) VALUES
-('PT-BOAT-001', DATE '2024-07-01', DATE '2024-07-10', 2);
+INSERT INTO Reservation(cni, start_date, end_date) VALUES
+('PT-BOAT-001', DATE '2024-07-01', DATE '2024-07-10');
 
 -- Lusitania: overlapping reservation with different responsible (should give error !!!!)
-INSERT INTO Reservation(cni, start_date, end_date, responsible_for_sid) VALUES
-('PT-BOAT-001', DATE '2024-07-05', DATE '2024-07-08', 3);
+INSERT INTO Reservation(cni, start_date, end_date) VALUES
+('PT-BOAT-001', DATE '2024-07-05', DATE '2024-07-08');
 
 -- Atlantico: single longer reservation
-INSERT INTO Reservation(cni, start_date, end_date, responsible_for_sid) VALUES
-('PT-BOAT-002', DATE '2024-08-01', DATE '2024-08-15', 3);
+INSERT INTO Reservation(cni, start_date, end_date) VALUES
+('PT-BOAT-002', DATE '2024-08-01', DATE '2024-08-15');
 
 -- Gaivota: short reservation, day-trips on river
-INSERT INTO Reservation(cni, start_date, end_date, responsible_for_sid) VALUES
-('PT-BOAT-003', DATE '2024-07-20', DATE '2024-07-22', 5);
+INSERT INTO Reservation(cni, start_date, end_date) VALUES
+('PT-BOAT-003', DATE '2024-07-20', DATE '2024-07-22');
 
 -- Ocean Breeze: reserved but (for now) no trips
-INSERT INTO Reservation(cni, start_date, end_date, responsible_for_sid) VALUES
-('BM-BOAT-004', DATE '2024-09-01', DATE '2024-09-30', 5);
+INSERT INTO Reservation(cni, start_date, end_date) VALUES
+('BM-BOAT-004', DATE '2024-09-01', DATE '2024-09-30');
+
+
+---------------------------------------
+-- Responsible for each reservation
+---------------------------------------
+INSERT INTO responsible_for(cni, start_date, responsible_sid) VALUES
+('PT-BOAT-001', DATE '2024-07-01', 2),  -- Bruno (senior skipper)
+('PT-BOAT-001', DATE '2024-07-05', 3),  -- Carla (senior skipper)
+('PT-BOAT-002', DATE '2024-08-01', 3),  -- Carla (senior skipper)
+('PT-BOAT-003', DATE '2024-07-20', 5),  -- Eva (senior skipper)
+
+
 
 ---------------------------------------
 -- authorized_for (who may skipper/crew each reservation)
@@ -181,11 +194,12 @@ INSERT INTO authorized_for(cni, start_date, sid) VALUES
 ---------------------------------------
 -- Trip 1: Lusitania, offshore trip Lisbon → Madeira
 INSERT INTO Trip(
-    cni, start_date, take_off_date, arrival_date,
+    cni, start_date, end_date, take_off_date, arrival_date,
     ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-001',
     DATE '2024-07-01',
+    DATE '2024-07-10',
     DATE '2024-07-02',
     DATE '2024-07-09',
     1001,
@@ -197,11 +211,12 @@ INSERT INTO Trip(
 -- Trip 2: Lusitania, short overlapping reservation with Carla as skipper
 -- (WE SHOULDN'T BE CAPABLE bc should have gotten error above)
 INSERT INTO Trip(
-    cni, start_date, take_off_date, arrival_date,
+    cni, start_date, end_date, take_off_date, arrival_date,
     ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-001',
     DATE '2024-07-05',
+    DATE '2024-07-08',
     DATE '2024-07-06',
     DATE '2024-07-08',
     1002,
@@ -212,11 +227,12 @@ INSERT INTO Trip(
 
 -- Trip 3: Atlantico with Carla
 INSERT INTO Trip(
-    cni, start_date, take_off_date, arrival_date,
+    cni, start_date, end_date, take_off_date, arrival_date,
     ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-002',
     DATE '2024-08-01',
+    DATE '2024-08-15',
     DATE '2024-08-02',
     DATE '2024-08-14',
     2001,
@@ -227,11 +243,12 @@ INSERT INTO Trip(
 
 -- Trip 4: Gaivota, day-trip with Eva
 INSERT INTO Trip(
-    cni, start_date, take_off_date, arrival_date,
+    cni, start_date, end_date, take_off_date, arrival_date,
     ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-003',
     DATE '2024-07-20',
+    DATE '2024-07-22',
     DATE '2024-07-20',
     DATE '2024-07-20',
     3001,
@@ -328,4 +345,10 @@ INSERT INTO records(cni, start_date, take_off_date, sequence, jurisdiction_name)
 
 
 -- DEFINE TABLE
---END DATE IN EVERY INSERT NEEDED
+INSERT INTO define(long, lat, name) VALUES
+(-9.142685, 38.736946, 'Lisbon Marina'),
+(-8.653784, 41.141376, 'Porto Marina'),
+(-7.937000, 37.016000, 'Faro Marina'),
+(-16.000000, 32.650000, 'Madeira Marina');
+
+
