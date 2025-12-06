@@ -226,3 +226,6 @@ CREATE TABLE define(
     -- Every country that registers a boat must have
     -- at least one location defined.
 );
+
+
+-- NAZARE
