@@ -182,7 +182,7 @@ INSERT INTO authorized_for(cni, start_date, sid) VALUES
 -- Trip 1: Lusitania, offshore trip Lisbon → Madeira
 INSERT INTO Trip(
     cni, start_date, take_off_date, arrival_date,
-    ins_ref, is_skipper_for_id, is_skipper_for_start_date, is_skipper_for_cni
+    ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-001',
     DATE '2024-07-01',
@@ -198,7 +198,7 @@ INSERT INTO Trip(
 -- (WE SHOULDN'T BE CAPABLE bc should have gotten error above)
 INSERT INTO Trip(
     cni, start_date, take_off_date, arrival_date,
-    ins_ref, is_skipper_for_id, is_skipper_for_start_date, is_skipper_for_cni
+    ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-001',
     DATE '2024-07-05',
@@ -213,7 +213,7 @@ INSERT INTO Trip(
 -- Trip 3: Atlantico with Carla
 INSERT INTO Trip(
     cni, start_date, take_off_date, arrival_date,
-    ins_ref, is_skipper_for_id, is_skipper_for_start_date, is_skipper_for_cni
+    ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-002',
     DATE '2024-08-01',
@@ -228,7 +228,7 @@ INSERT INTO Trip(
 -- Trip 4: Gaivota, day-trip with Eva
 INSERT INTO Trip(
     cni, start_date, take_off_date, arrival_date,
-    ins_ref, is_skipper_for_id, is_skipper_for_start_date, is_skipper_for_cni
+    ins_ref, is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni
 ) VALUES (
     'PT-BOAT-003',
     DATE '2024-07-20',
