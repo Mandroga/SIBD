@@ -7,6 +7,21 @@ name VARCHAR(255) NOT NULL,
 PRIMARY KEY(long, lat)
 );
 
+CREATE TABLE Country(
+	iso_code VARCHAR(5),
+	name VARCHAR(60) NOT NULL,
+	flag VARCHAR(2083) NOT NULL,
+    UNIQUE(name),
+    UNIQUE (flag),
+	PRIMARY KEY(iso_code)
+);
+
+CREATE TABLE Class(
+	name VARCHAR(80),
+	max_length NUMERIC(6,2) NOT NULL,
+	PRIMARY KEY(name)
+);
+
 CREATE TABLE Boat -- TYPE!
 (
 cni VARCHAR(25), --
@@ -51,7 +66,7 @@ sid INTEGER,
 issue_date DATE,
 expiry_date DATE NOT NULL,
 PRIMARY KEY(sid, issue_date),
-FOREIGN KEY(sid) REFERENCES Sailor(sid),
+FOREIGN KEY(sid) REFERENCES Sailor(sid)
 );
 
 CREATE TABLE Reservation -- IC4, IC6, IC12, IC13, IC15 IC!
@@ -65,6 +80,17 @@ FOREIGN KEY(cni) REFERENCES Boat(cni),
 FOREIGN KEY(responsible_for_sid) REFERENCES Senior_Sailor(sid)
 -- CHECK (start_date <= end_date) -- IC12
 );
+
+CREATE TABLE responsible_for
+(
+cni VARCHAR(25),
+start_date DATE,
+responsible_sid INTEGER,
+PRIMARY KEY(cni, start_date, responsible_sid),
+FOREIGN KEY(cni, start_date) REFERENCES Reservation(cni, start_date),
+FOREIGN KEY(responsible_sid) REFERENCES Senior_Sailor(sid)
+);
+DROP TABLE responsible_for;
 
 CREATE TABLE authorized_for -- MANDATORY! IC! IC5
 (
@@ -84,12 +110,12 @@ start_date DATE,
 take_off_date DATE,
 arrival_date DATE NOT NULL,
 ins_ref INTEGER NOT NULL,
-is_skipper_for_id INTEGER,
+is_skipper_for_sid INTEGER,
 is_skipper_for_start_date DATE,
 is_skipper_for_cni VARCHAR(25),
 PRIMARY KEY(cni, start_date, take_off_date),
 FOREIGN KEY (cni, start_date) REFERENCES Reservation(cni,start_date),
-FOREIGN KEY (is_skipper_for_id, is_skipper_for_start_date, is_skipper_for_cni) REFERENCES authorized_for(sid, start_date, cni)
+FOREIGN KEY (is_skipper_for_sid, is_skipper_for_start_date, is_skipper_for_cni) REFERENCES authorized_for(sid, start_date, cni)
 --CHECK (take_off_date <= arrival_date)
 
 );
@@ -103,7 +129,7 @@ start_long NUMERIC(9,6),
 end_long NUMERIC(9,6),
 start_lat NUMERIC(8,6),
 end_lat NUMERIC(8,6),
-PRIMARY KEY (cni, start_date, take_off_date, start_long, start_lat, end_long, end_long),
+PRIMARY KEY (cni, start_date, take_off_date, start_long, start_lat, end_long, end_lat),
 FOREIGN KEY (cni,start_date,take_off_date) REFERENCES Trip(cni,start_date,take_off_date),
 FOREIGN KEY (start_long,start_lat) REFERENCES Location(long,lat),
 FOREIGN KEY (end_long, end_lat) REFERENCES Location(long,lat)
@@ -111,21 +137,7 @@ FOREIGN KEY (end_long, end_lat) REFERENCES Location(long,lat)
 );
 
 
-CREATE TABLE Country(
-	iso_code VARCHAR(5),
-	name VARCHAR(60) NOT NULL,
-	flag VARCHAR(2083) NOT NULL,
-    UNIQUE(name),
-    UNIQUE (flag),
-	PRIMARY KEY(iso_code),
 
-);
-
-CREATE TABLE Class(
-	name VARCHAR(80),
-	max_length NUMERIC(6,2) NOT NULL,
-	PRIMARY KEY(name)
-);
 
 CREATE TABLE Jurisdiction(
 	name VARCHAR(80),
@@ -135,14 +147,15 @@ CREATE TABLE Jurisdiction(
 CREATE TABLE enables(
     sid INTEGER,
     issue_date DATE,
-    name VARCHAR(80),
+    jurisdiction_name VARCHAR(80),
     class_name VARCHAR(80),
-    PRIMARY KEY (sid, issue_date, name, class_name),
+    PRIMARY KEY (sid, issue_date, jurisdiction_name, class_name),
     FOREIGN KEY (sid, issue_date) REFERENCES Certification(sid, issue_date),
-    FOREIGN KEY (name) REFERENCES Jurisdiction(name),
+    FOREIGN KEY (jurisdiction_name) REFERENCES Jurisdiction(name),
     FOREIGN KEY (class_name) REFERENCES Class(name)
     -- Every certification must have at least one Jurisdiction defined
 );
+DROP TABLE enables;
 
 CREATE TABLE International_Jurisdiction(
 	name VARCHAR(80),
