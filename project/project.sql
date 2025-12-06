@@ -91,17 +91,7 @@ PRIMARY KEY(cni, start_date, take_off_date),
 FOREIGN KEY (cni, start_date) REFERENCES Reservation(cni,start_date),
 FOREIGN KEY (is_skipper_for_id, is_skipper_for_start_date, is_skipper_for_cni) REFERENCES authorized_for(sid, start_date, cni)
 --CHECK (take_off_date <= arrival_date)
-);
 
-CREATE TABLE registers -- TYPE! MANDATORY! IC! IC8
-(
-cni VARCHAR(25),
-iso VARCHAR(5),
-year DATE NOT NULL,
-PRIMARY KEY(cni, iso),
-FOREIGN KEY(cni) REFERENCES Boat(cni),
-FOREIGN KEY(iso) REFERENCES Country(iso_code)
--- mandatory boat side
 );
 
 CREATE TABLE starts_ends -- MANDATORY!
@@ -125,9 +115,11 @@ CREATE TABLE Country(
 	iso_code VARCHAR(5),
 	name VARCHAR(60) NOT NULL,
 	flag VARCHAR(2083) NOT NULL,
+    registers_iso VARCHAR(5),
     UNIQUE(name),
     UNIQUE (flag),
-	PRIMARY KEY(iso_code)
+	PRIMARY KEY(iso_code),
+    FOREIGN KEY (registers_iso) REFERENCES Country(iso_code)
 );
 
 CREATE TABLE Class(
@@ -148,6 +140,7 @@ CREATE TABLE enables(
     PRIMARY KEY (sid, issue_date, name),
     FOREIGN KEY (sid, issue_date) REFERENCES Certification(sid, issue_date),
     FOREIGN KEY (name) REFERENCES Jurisdiction(name)
+    -- Every certification must have at least one Jurisdiction defined
 );
 
 CREATE TABLE International_Jurisdiction(
@@ -173,6 +166,6 @@ CREATE TABLE records(
     PRIMARY KEY(cni, start_date, take_off_date, jurisdiction_name),
     FOREIGN KEY(cni, start_date, take_off_date) REFERENCES Trip(cni, start_date, take_off_date),
     FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
-    -- MANDATORYYYY
+    -- Every trip must have at least one jurisdiction recorded
 );
 
