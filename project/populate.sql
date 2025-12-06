@@ -325,3 +325,7 @@ INSERT INTO records(cni, start_date, take_off_date, sequence, jurisdiction_name)
 -- Trip 4: river only
 INSERT INTO records(cni, start_date, take_off_date, sequence, jurisdiction_name) VALUES
 ('PT-BOAT-003', DATE '2024-07-20', DATE '2024-07-20', 1, 'Douro River');
+
+
+-- DEFINE TABLE
+--END DATE IN EVERY INSERT NEEDED
