@@ -86,7 +86,7 @@ sid INTEGER,
 PRIMARY KEY(cni, start_date, sid),
 FOREIGN KEY(sid) REFERENCES Sailor(sid),
 FOREIGN KEY(cni, start_date) REFERENCES Reservation(cni, start_date)
--- Mandatory reservation side
+-- Every reservation must have at least one sailor
 );
 
 CREATE TABLE responsible_for
