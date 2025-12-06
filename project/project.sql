@@ -9,7 +9,7 @@ PRIMARY KEY(long, lat)
 
 CREATE TABLE Boat -- TYPE!
 (
-cni INTEGER, --
+cni VARCHAR(25), --
 picture_path VARCHAR(2083) NOT NULL,
 length NUMERIC(6,2) NOT NULL,
 name VARCHAR(255) NOT NULL,
@@ -52,7 +52,7 @@ FOREIGN KEY(sid) REFERENCES Sailor(sid)
 
 CREATE TABLE Reservation -- IC4, IC6, IC12, IC13, IC15 IC!
 (
-cni INTEGER,
+cni VARCHAR(25),
 start_date DATE,
 end_date DATE NOT NULL,
 responsible_for_sid INTEGER,
@@ -64,7 +64,7 @@ FOREIGN KEY(responsible_for_sid) REFERENCES Senior(sid), -- IC4
 
 CREATE TABLE authorized_for -- MANDATORY! IC! IC5
 (
-cni INTEGER,
+cni VARCHAR(25),
 start_date DATE,
 sid INTEGER,
 PRIMARY KEY(sid, cni, start_date),
@@ -75,22 +75,21 @@ FOREIGN KEY(cni, start_date) REFERENCES Reservation(cni, start_date)
 
 CREATE TABLE Trip -- IC! IC6, IC11, IC14, IC15
 (
-cni INTEGER,
+cni VARCHAR(25),
 start_date DATE,
 take_off_date DATE,
 arrival_date DATE NOT NULL,
 ins_ref INTEGER NOT NULL,
 PRIMARY KEY(cni, start_date, take_off_date),
-FOREIGN KEY (cni) REFERENCES Boat(cni),---???
-FOREIGN KEY (start_date) REFERENCES Reservation(start_date), ----?
+FOREIGN KEY (cni, start_date) REFERENCES Reservation(cni,start_date),
 --CHECK (take_off_date <= arrival_date)
 );
 
 CREATE TABLE registers -- TYPE! MANDATORY! IC! IC8
 (
-cni INTEGER,
+cni VARCHAR(25),
 iso INTEGER,
-year DATE,
+year DATE NOT NULL,
 PRIMARY KEY(cni, iso),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
 FOREIGN KEY(iso) REFERENCES Country(iso)
@@ -99,7 +98,7 @@ FOREIGN KEY(iso) REFERENCES Country(iso)
 
 CREATE TABLE starts_ends -- MANDATORY!
 (
-cni INTEGER,
+cni VARCHAR(25),
 start_date DATE,
 take_off_date DATE,
 
@@ -158,7 +157,7 @@ CREATE TABLE national_jurisdiction(
 
 CREATE TABLE is_skipper_for(
 	sid INTEGER,
-	cni INTEGER,
+	cni VARCHAR(25),
     start_date DATE,
     take_off_date DATE,
     PRIMARY KEY(sid, cni, start_date, take_off_date),
@@ -167,7 +166,7 @@ CREATE TABLE is_skipper_for(
 )   
 
 CREATE TABLE records(
-    cni INTEGER,
+    cni VARCHAR(25),
     start_date DATE,
     take_off_date DATE,
     sequence INTEGER,
