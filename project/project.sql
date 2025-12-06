@@ -88,7 +88,7 @@ FOREIGN KEY (cni, start_date) REFERENCES Reservation(cni,start_date),
 CREATE TABLE registers -- TYPE! MANDATORY! IC! IC8
 (
 cni VARCHAR(25),
-iso INTEGER,
+iso VARCHAR(5),
 year DATE NOT NULL,
 PRIMARY KEY(cni, iso),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
@@ -102,11 +102,14 @@ cni VARCHAR(25),
 start_date DATE,
 take_off_date DATE,
 
-start_long NUMERIC(12,4),
-end_long NUMERIC(12,4),
-start_lat NUMERIC(12,4),
-end_lat NUMERIC(12,4),
-PRIMARY KEY(cni, start_date, take_off_date, start_long, start_lat, end_long, end_long)
+start_long NUMERIC(9,6),
+end_long NUMERIC(9,6),
+start_lat NUMERIC(8,6),
+end_lat NUMERIC(8,6),
+PRIMARY KEY (cni, start_date, take_off_date, start_long, start_lat, end_long, end_long),
+FOREIGN KEY (cni,start_date,take_off_date) REFERENCES Trip(cni,start_date,take_off_date),
+FOREIGN KEY (start_long,start_lat) REFERENCES Location(long,lat),
+FOREIGN KEY (end_long, end_lat) REFERENCES Location(long,lat)
 -- mandatory trip side
 );
 
@@ -124,7 +127,7 @@ FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
 );
 
 CREATE TABLE country(
-	iso_code CHAR(3),
+	iso_code VARCHAR(5),
 	name VARCHAR(60) NOT NULL,
 	flag VARCHAR(300),
 	PRIMARY KEY(iso_code)
