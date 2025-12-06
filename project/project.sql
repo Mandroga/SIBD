@@ -19,9 +19,9 @@ PRIMARY KEY(cni)
 CREATE TABLE Sailor -- IC1
 (
 sid INTEGER,
-first_name VARCHAR(255),
-surname VARCHAR(255),
-email VARCHAR(255),
+first_name VARCHAR(50) NOT NULL,
+surname VARCHAR(80) NOT NULL,
+email VARCHAR(254) NOT NULL,
 PRIMARY KEY(sid),
 UNIQUE(email)
 );
@@ -45,7 +45,7 @@ CREATE TABLE Certification -- TYPE! A certification is the permitions the sailor
 (
 sid INTEGER,
 issue_date DATE,
-expiry_date DATE,
+expiry_date DATE NOT NULL,
 PRIMARY KEY(sid, issue_date),
 FOREIGN KEY(sid) REFERENCES Sailor(sid)
 );
@@ -54,7 +54,7 @@ CREATE TABLE Reservation -- IC4, IC6, IC12, IC13, IC15 IC!
 (
 cni INTEGER,
 start_date DATE,
-end_date DATE,
+end_date DATE NOT NULL,
 responsible_for_sid INTEGER,
 PRIMARY KEY(cni, start_date),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
