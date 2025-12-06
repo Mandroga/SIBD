@@ -14,8 +14,10 @@ picture_path VARCHAR(2083) NOT NULL,
 length NUMERIC(6,2) NOT NULL,
 name VARCHAR(255) NOT NULL,
 of_class_name VARCHAR(80),
+registered_iso VARCHAR(5),
 PRIMARY KEY(cni),
-FOREIGN KEY (of_class_name) REFERENCES Class(name)
+FOREIGN KEY (of_class_name) REFERENCES Class(name),
+FOREIGN KEY (registered_iso) REFERENCES Country(iso_code)
 );
 
 CREATE TABLE Sailor -- IC1
@@ -115,11 +117,10 @@ CREATE TABLE Country(
 	iso_code VARCHAR(5),
 	name VARCHAR(60) NOT NULL,
 	flag VARCHAR(2083) NOT NULL,
-    registers_iso VARCHAR(5),
     UNIQUE(name),
     UNIQUE (flag),
 	PRIMARY KEY(iso_code),
-    FOREIGN KEY (registers_iso) REFERENCES Country(iso_code)
+
 );
 
 CREATE TABLE Class(
