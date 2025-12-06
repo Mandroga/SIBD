@@ -13,7 +13,9 @@ cni VARCHAR(25), --
 picture_path VARCHAR(2083) NOT NULL,
 length NUMERIC(6,2) NOT NULL,
 name VARCHAR(255) NOT NULL,
-PRIMARY KEY(cni)
+of_class_name VARCHAR(80),
+PRIMARY KEY(cni),
+FOREIGN KEY (of_class_name) REFERENCES Class(name)
 );
 
 CREATE TABLE Sailor -- IC1
@@ -26,14 +28,14 @@ PRIMARY KEY(sid),
 UNIQUE(email)
 );
 
-CREATE TABLE Junior -- Sailor disjoint specialization
+CREATE TABLE Junior_Sailor -- Sailor disjoint specialization
 (
 sid INTEGER,
 PRIMARY KEY(sid),
 FOREIGN KEY(sid) REFERENCES Sailor(sid)
 );
 
-CREATE TABLE Senior -- Sailor disjoint specialization
+CREATE TABLE Senior_Sailor -- Sailor disjoint specialization
 (
 sid INTEGER,
 PRIMARY KEY(sid),
@@ -58,7 +60,7 @@ end_date DATE NOT NULL,
 responsible_for_sid INTEGER,
 PRIMARY KEY(cni, start_date),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
-FOREIGN KEY(responsible_for_sid) REFERENCES Senior(sid), -- IC4
+FOREIGN KEY(responsible_for_sid) REFERENCES Senior_Sailor(sid), -- IC4
 -- CHECK (start_date <= end_date) -- IC12
 );
 
@@ -125,7 +127,7 @@ FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
 -- mandatory certification side
 );
 
-CREATE TABLE country(
+CREATE TABLE Country(
 	iso_code VARCHAR(5),
 	name VARCHAR(60) NOT NULL,
 	flag VARCHAR(2083) NOT NULL,
@@ -177,7 +179,8 @@ CREATE TABLE records(
     sequence INTEGER,
     jurisdiction_name VARCHAR(80),
     PRIMARY KEY(cni, start_date, take_off_date, jurisdiction_name),
-    FOREIGN KEY(cni, start_date, take_off_date) REFERENCES trip(cni, start_date, take_off_date),
-    FOREIGN KEY(jurisdiction_name) REFERENCES jurisdiction(name)
+    FOREIGN KEY(cni, start_date, take_off_date) REFERENCES Trip(cni, start_date, take_off_date),
+    FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
     -- MANDATORYYYY
 )
+
