@@ -3,8 +3,8 @@
 ---------------------------------------
 -- Country flags (real URLs)
 INSERT INTO Country(iso_code, name, flag) VALUES
-('PTR', 'Portugal', 'https://flagcdn.com/w320/pt.png', ),
-('GBN', 'United Kingdom', 'https://flagcdn.com/w320/gb.png'),
+('PTR', 'Portugal', 'https://flagcdn.com/w320/pt.png'),
+('SPN', 'Spain', 'https://flagcdn.com/w320/es.png'),
 ('BMU', 'Bermuda', 'https://flagcdn.com/w320/bm.png');
 
 ---------------------------------------
@@ -25,19 +25,22 @@ INSERT INTO International_Jurisdiction(name) VALUES
 ('International Waters');
 
 INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES
-('Portugal Territorial Waters', 'PT'),
-('Douro River', 'PT'),
-('Ria Formosa Lagoon', 'PT'),
-('UK Territorial Waters', 'GB');
+('Portuguese EEZ', 'PTR'),
+('Portuguese Territorial Sea', 'PTR'),
+('Spanish EEZ', 'SPN'),
+('Spanish Territorial Sea','SPN'),
+('Spanish Internal Waters','SPN');
 
 ---------------------------------------
 -- Classes
 ---------------------------------------
 INSERT INTO Class(name, max_length) VALUES
-('Dinghy', 6.00),
-('Cruiser 30', 9.50),
-('Cruiser 40', 12.00),
-('Optimist', 2.50);
+('Class 2', 6.00),
+('Class 3', 9.50),
+('Class 4', 12.00),
+('Class 1', 2.50),
+(NULL, NULL),
+('Class 5', NULL);
 
 ---------------------------------------
 -- Locations
@@ -71,33 +74,36 @@ INSERT INTO Senior_Sailor(sid) VALUES
 ---------------------------------------
 -- Certifications (valid & expired)
 ---------------------------------------
--- Bruno: valid Cruiser 30 cert (multi-jurisdiction)
+-- Bruno: valid (multi-jurisdiction)
 INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(2, DATE '2023-01-01', DATE '2026-12-31', 'Cruiser 30');
+(2, DATE '2023-01-01', DATE '2026-12-31', 'Class 1');
 
--- Bruno: old expired Dinghy cert
+-- Bruno: old expired
 INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(2, DATE '2020-01-01', DATE '2020-12-31', 'Dinghy');
+(2, DATE '2020-01-01', DATE '2020-12-31', 'Class 2');
 
--- Carla: Cruiser 40 cert
+-- Carla
 INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(3, DATE '2022-06-15', DATE '2025-06-14', 'Cruiser 40');
+(3, DATE '2022-06-15', DATE '2025-06-14', 'Class 3');
 
--- Ana (junior): Optimist cert for rivers
+-- Ana (junior)
 INSERT INTO Certification(sid, issue_date, expiry_date, for_class_name) VALUES
-(1, DATE '2024-03-01', DATE '2024-09-30', 'Optimist');
+(1, DATE '2024-03-01', DATE '2024-09-30', 'Class 4');
 
 ---------------------------------------
 -- enables (Certification ↔ Jurisdictions)
 ---------------------------------------
--- Bruno, Cruiser 30 (offshore + coastal)
+-- Bruno
 INSERT INTO enables(sid, issue_date, name) VALUES
 (2, DATE '2023-01-01', 'International Waters'),
-(2, DATE '2023-01-01', 'Portugal Territorial Waters');
+(2, DATE '2023-01-01', 'Portugal Territorial Waters'),
+(2, DATE '2023-01-01', 'Portugal EEZ'),
+(2, DATE '2023-01-01', 'Portugal Internal Waters'),
+(2, DATE '2023-01-01', 'Douro River'),
 
--- Bruno, expired Dinghy cert (river only)
+-- Bruno, expired certification
 INSERT INTO enables(sid, issue_date, name) VALUES
-(2, DATE '2020-01-01', 'Douro River');
+(2, DATE '2020-01-01', 'Portuguese Internal Waters');
 
 -- Carla, Cruiser 40, international + UK waters
 INSERT INTO enables(sid, issue_date, name) VALUES
