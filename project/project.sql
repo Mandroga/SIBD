@@ -85,9 +85,11 @@ take_off_date DATE,
 arrival_date DATE NOT NULL,
 ins_ref INTEGER NOT NULL,
 is_skipper_for_id INTEGER,
+is_skipper_for_start_date DATE,
+is_skipper_for_cni VARCHAR(25),
 PRIMARY KEY(cni, start_date, take_off_date),
 FOREIGN KEY (cni, start_date) REFERENCES Reservation(cni,start_date),
-FOREIGN KEY (is_skipper_for_id) REFERENCES Sailor(sid)
+FOREIGN KEY (is_skipper_for_id, is_skipper_for_start_date, is_skipper_for_cni) REFERENCES authorized_for(sid, start_date, cni)
 --CHECK (take_off_date <= arrival_date)
 );
 
