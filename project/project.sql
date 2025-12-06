@@ -1,20 +1,18 @@
-
-
 -- MANDATORY!, TYPE!, IC!
 CREATE TABLE Location -- TYPE!
 (
-long NUMERIC(12,4),
-lat NUMERIC(12,4),
-name VARCHAR(255),
+long NUMERIC(8,6),
+lat NUMERIC(9,6),
+name VARCHAR(255) NOT NULL,
 PRIMARY KEY(long, lat)
 );
 
 CREATE TABLE Boat -- TYPE!
 (
 cni INTEGER, --
-picture_path VARCHAR(255),
-lenght NUMERIC(12,4),
-name VARCHAR(255),
+picture_path VARCHAR(2083) NOT NULL,
+length NUMERIC(6,2) NOT NULL,
+name VARCHAR(255) NOT NULL,
 PRIMARY KEY(cni)
 );
 
