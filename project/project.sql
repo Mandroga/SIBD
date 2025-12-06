@@ -62,7 +62,7 @@ end_date DATE NOT NULL,
 responsible_for_sid INTEGER,
 PRIMARY KEY(cni, start_date),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
-FOREIGN KEY(responsible_for_sid) REFERENCES Senior_Sailor(sid), -- IC4
+FOREIGN KEY(responsible_for_sid) REFERENCES Senior_Sailor(sid)
 -- CHECK (start_date <= end_date) -- IC12
 );
 
@@ -100,7 +100,7 @@ iso VARCHAR(5),
 year DATE NOT NULL,
 PRIMARY KEY(cni, iso),
 FOREIGN KEY(cni) REFERENCES Boat(cni),
-FOREIGN KEY(iso) REFERENCES Country(iso)
+FOREIGN KEY(iso) REFERENCES Country(iso_code)
 -- mandatory boat side
 );
 
@@ -128,18 +128,18 @@ CREATE TABLE Country(
     UNIQUE(name),
     UNIQUE (flag),
 	PRIMARY KEY(iso_code)
-)
+);
 
 CREATE TABLE Class(
 	name VARCHAR(80),
-	max_length(6,2) NOT NULL,
+	max_length NUMERIC(6,2) NOT NULL,
 	PRIMARY KEY(name)
-)
+);
 
 CREATE TABLE Jurisdiction(
 	name VARCHAR(80),
 	PRIMARY KEY(name)
-)
+);
 
 CREATE TABLE enables(
     sid INTEGER,
@@ -148,13 +148,13 @@ CREATE TABLE enables(
     PRIMARY KEY (sid, issue_date, name),
     FOREIGN KEY (sid, issue_date) REFERENCES Certification(sid, issue_date),
     FOREIGN KEY (name) REFERENCES Jurisdiction(name)
-)
+);
 
 CREATE TABLE International_Jurisdiction(
 	name VARCHAR(80),
 	PRIMARY KEY(name),
 	FOREIGN KEY(name) REFERENCES Jurisdiction(name)
-)
+);
 
 CREATE TABLE National_Jurisdiction(
 	name VARCHAR(80),
@@ -162,7 +162,7 @@ CREATE TABLE National_Jurisdiction(
 	PRIMARY KEY(name),
 	FOREIGN KEY(name) REFERENCES Jurisdiction(name),
 	FOREIGN KEY(belongs_to_iso) REFERENCES Country(iso_code)
-)
+);
 
 CREATE TABLE records(
     cni VARCHAR(25),
@@ -174,5 +174,5 @@ CREATE TABLE records(
     FOREIGN KEY(cni, start_date, take_off_date) REFERENCES Trip(cni, start_date, take_off_date),
     FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
     -- MANDATORYYYY
-)
+);
 
