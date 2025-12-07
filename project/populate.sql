@@ -7,6 +7,13 @@ INSERT INTO Country(iso_code, name, flag) VALUES
 ('SPN', 'Spain', 'https://flagcdn.com/w320/es.png'),
 ('BMU', 'Bermuda', 'https://flagcdn.com/w320/bm.png');
 
+-- Shouldnt be allowed
+INSERT INTO Country(iso_code, name, flag) VALUES ('XXX','xxx','https://flagcdn.com/w320/pt.png');
+INSERT INTO Country(iso_code, name, flag) VALUES ('XXX','Portugal','xxx');
+INSERT INTO Country(iso_code, name, flag) VALUES ('', '',''); -- PROBLEM!
+-- We need to check if its empty string, do we need to check if its a valid ISO, name or link ?
+SELECT * FROM Country;
+DELETE FROM Country;
 ---------------------------------------
 -- Jurisdictions
 ---------------------------------------
@@ -16,13 +23,27 @@ INSERT INTO Jurisdiction(name) VALUES
 ('Portuguese Territorial Sea'),
 ('Spanish EEZ'),
 ('Spanish Territorial Sea'),
-('Spanish Internal Waters');
+('Spanish Internal Waters'),
+('English Internal Waters'),
+('Venezuelan EEZ');
+
+-- EDGE CASE
+INSERT INTO Jurisdiction(name) VALUES (''); -- PROBLEM?
+
+
+SELECT * FROM jurisdiction;
+DELETE FROM international_jurisdiction;
+DELETE FROM national_jurisdiction;
+DELETE FROM jurisdiction;
+
 
 ---------------------------------------
 -- International / National Jurisdictions
 ---------------------------------------
 INSERT INTO International_Jurisdiction(name) VALUES
 ('International Waters');
+-- Shouldnt be allowed
+INSERT INTO International_Jurisdiction(name) VALUES ('Venezuelan EEZ'); -- PROBLEM!
 
 INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES
 ('Portuguese EEZ', 'PTR'),
@@ -31,6 +52,14 @@ INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES
 ('Spanish Territorial Sea','SPN'),
 ('Spanish Internal Waters','SPN');
 
+-- Shouldnt be allowed
+INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('English Internal Waters','SPN'); -- PROBLEM?
+INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('xxx','xxx');
+INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('','');
+INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('Venezuelan EEZ','xxx');
+
+
+
 ---------------------------------------
 -- Classes
 ---------------------------------------
@@ -38,10 +67,19 @@ INSERT INTO Class(name, max_length) VALUES
 ('Class 2', 6.00),
 ('Class 3', 9.50),
 ('Class 4', 12.00),
-('Class 1', 2.50),
-(NULL, NULL),
-('Class 5', NULL);
+('Class 1', 2.50);
 
+-- shouldnt be allowed
+INSERT INTO Class(name, max_length) VALUES (NULL, NULL);
+INSERT INTO Class(name, max_length) VALUES ('Class 5', NULL);
+INSERT INTO Class(name, max_length) VALUES (NULL, 5);
+INSERT INTO Class(name, max_length) VALUES ('Class 4', 5);
+INSERT INTO Class(name, max_length) VALUES ('Class 5', -1); -- PROBLEM?
+INSERT INTO Class(name, max_length) VALUES ('Class 6', 0); -- PROBLEM?
+INSERT INTO Class(name, max_length) VALUES ('', 1000); -- PROBLEM?
+INSERT INTO Class(name, max_length) VALUES ('Class 7', 001);
+SELECT * FROM Class;
+DELETE FROM Class;
 ---------------------------------------
 -- Locations
 ---------------------------------------
@@ -51,6 +89,16 @@ INSERT INTO Location(long, lat, name) VALUES
 (-7.937000, 37.016000, 'Faro Marina'),
 (-16.000000, 32.650000, 'Madeira Marina');
 
+-- Shouldnt be allowed
+INSERT INTO Location(long, lat, name) VALUES (90, 180, '');
+INSERT INTO Location(long, lat, name) VALUES (-90, -180, '');
+INSERT INTO Location(long, lat, name) VALUES (-100, 180, '');
+INSERT INTO Location(long, lat, name) VALUES (-90, 190, ''); -- PROBLEM!
+INSERT INTO Location(long, lat, name) VALUES (-16.000000, 32.650000, 'Madeira Marina2');
+INSERT INTO Location(long, lat, name) VALUES (-16.0000001, 32.650000, 'Madeira Marina2');
+
+SELECT * FROM location;
+DELETE FROM Location;
 ---------------------------------------
 -- Sailors
 ---------------------------------------
@@ -61,6 +109,14 @@ INSERT INTO Sailor(sid, first_name, surname, email) VALUES
 (4, 'Daniel','Pereira',   'daniel.pereira@example.com'),
 (5, 'Eva',   'Santos',    'eva.santos@example.com');
 
+DELETE FROM Sailor;
+-- Shouldnt be allowed
+INSERT INTO Sailor(sid, first_name, surname, email) VALUES (NULL, NULL, NULL, NULL);
+INSERT INTO Sailor(sid, first_name, surname, email) VALUES (1, '', '', '');
+INSERT INTO Sailor(sid, first_name, surname, email) VALUES (6, '', '', '');-- PROBLEM?
+INSERT INTO Sailor(sid, first_name, surname, email) VALUES (7, 'xx', 'xx', 'def not an email'); -- PROBLEM?
+INSERT INTO Sailor(sid, first_name, surname, email) VALUES (-1, '', '', 'xa'); -- PROBLEM?
+INSERT INTO Sailor(sid, first_name, surname, email) VALUES ( 8, '123', '123', 'xxaa');
 -- Specializations
 INSERT INTO Junior_Sailor(sid) VALUES
 (1),
@@ -78,6 +134,9 @@ INSERT INTO Senior_Sailor(sid) VALUES
 INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
 (2, DATE '2023-01-01', DATE '2026-12-31');
 
+INSERT INTO Certification(sid, issue_date, expiry_date) VALUES -- PROBLEM!
+(1, DATE '2023-01-01', DATE '2022-12-31');
+
 -- Bruno: old expired
 INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
 (2, DATE '2020-01-01', DATE '2020-12-31');
@@ -90,23 +149,27 @@ INSERT INTO Certification(sid, issue_date, expiry_date ) VALUES
 INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
 (1, DATE '2024-03-01', DATE '2024-09-30');
 
+-- Shouldnt allow
+INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
+(4, DATE '2024-03-01', DATE '2024-09-30');
 ---------------------------------------
 -- enables (Certification ↔ Jurisdictions)
 ---------------------------------------
 -- Bruno
-INSERT INTO enables(sid, issue_date, name, class_name) VALUES
+INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
 (2, DATE '2023-01-01', 'International Waters','Class 4'),
 (2, DATE '2023-01-01', 'Portugal Territorial Waters', 'Class 4'),
 (2, DATE '2023-01-01', 'Portugal EEZ', 'Class 4'),
 (2, DATE '2023-01-01', 'Portugal Internal Waters', 'Class 4'),
-(2, DATE '2023-01-01', 'Douro River');
+(2, DATE '2023-01-01', 'Douro River', 'Class 3');
 
 -- Bruno, expired certification
-INSERT INTO enables(sid, issue_date, name, class_name) VALUES
+INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
 (2, DATE '2020-01-01', 'Portuguese Internal Waters', 'Class 1');
 
+SELECT * FROM Sailor;
 -- Carla
-INSERT INTO enables(sid, issue_date, name, class_name) VALUES
+INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
 (3, DATE '2022-06-15', 'International Waters', 'Class 3'),
 (3, DATE '2022-06-15', 'Spain EEZ', 'Class 3'),
 (3, DATE '2022-06-15', 'Spain Territorial Waters', 'Class 3'),
@@ -114,7 +177,7 @@ INSERT INTO enables(sid, issue_date, name, class_name) VALUES
 (3, DATE '2022-06-15', 'Spain Tejo River', 'Class 3');
 
 -- Ana (junior)
-INSERT INTO enables(sid, issue_date, name, class_name) VALUES
+INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
 (1, DATE '2024-03-01', 'Portuguese Internal Waters', 'Class 1');
 
 ---------------------------------------
@@ -158,7 +221,7 @@ INSERT INTO responsible_for(cni, start_date, responsible_sid) VALUES
 ('PT-BOAT-001', DATE '2024-07-01', 2),  -- Bruno (senior skipper)
 ('PT-BOAT-001', DATE '2024-07-05', 3),  -- Carla (senior skipper)
 ('PT-BOAT-002', DATE '2024-08-01', 3),  -- Carla (senior skipper)
-('PT-BOAT-003', DATE '2024-07-20', 5),  -- Eva (senior skipper)
+('PT-BOAT-003', DATE '2024-07-20', 5);  -- Eva (senior skipper)
 
 
 

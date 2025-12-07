@@ -2,6 +2,8 @@
 <project version="4">
   <component name="DataSourcePerFileMappings">
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/ac75f311-b54f-4ee8-9310-76001d3cf21f/console.sql" value="ac75f311-b54f-4ee8-9310-76001d3cf21f" />
+    <file url="file://$PROJECT_DIR$/project/drop_tables.sql" value="ac75f311-b54f-4ee8-9310-76001d3cf21f" />
+    <file url="file://$PROJECT_DIR$/project/populate.sql" value="ac75f311-b54f-4ee8-9310-76001d3cf21f" />
     <file url="file://$PROJECT_DIR$/project/queries.sql" value="ac75f311-b54f-4ee8-9310-76001d3cf21f" />
     <file url="file://$PROJECT_DIR$/project/schema.sql" value="ac75f311-b54f-4ee8-9310-76001d3cf21f" />
   </component>

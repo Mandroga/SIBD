@@ -1,4 +1,5 @@
 
+
 CREATE TABLE Location 
 (
 long NUMERIC(8,6),
@@ -20,7 +21,7 @@ CREATE TABLE Class(
 	name VARCHAR(80),
 	max_length NUMERIC(6,2) NOT NULL,
 	PRIMARY KEY(name),
-    UNIQUE(name, max_length)
+    UNIQUE(name, max_length) -- primary key makes this combination unique, but its written explicitly for the dbms to accept it as a foreign key
 );
 
 CREATE TABLE Boat -- TYPE!
@@ -82,7 +83,7 @@ cni VARCHAR(25),
 start_date DATE,
 end_date DATE NOT NULL,
 PRIMARY KEY(cni, start_date),
-UNIQUE(cni, start_date, end_date),
+UNIQUE(cni, start_date, end_date), -- primary key makes this combination unique, but its written explicitly for the dbms to accept it as a foreign key
 FOREIGN KEY(cni) REFERENCES Boat(cni),
 CHECK(start_date <= end_date) --IC12
 );
