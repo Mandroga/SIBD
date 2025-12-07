@@ -74,8 +74,8 @@ INSERT INTO Class(name, max_length) VALUES (NULL, NULL);
 INSERT INTO Class(name, max_length) VALUES ('Class 5', NULL);
 INSERT INTO Class(name, max_length) VALUES (NULL, 5);
 INSERT INTO Class(name, max_length) VALUES ('Class 4', 5);
-INSERT INTO Class(name, max_length) VALUES ('Class 5', -1); -- PROBLEM?
-INSERT INTO Class(name, max_length) VALUES ('Class 6', 0); -- PROBLEM?
+INSERT INTO Class(name, max_length) VALUES ('Class 5', -1); -- PROBLEM!
+INSERT INTO Class(name, max_length) VALUES ('Class 6', 0); -- PROBLEM!
 INSERT INTO Class(name, max_length) VALUES ('', 1000); -- PROBLEM?
 INSERT INTO Class(name, max_length) VALUES ('Class 7', 001);
 SELECT * FROM Class;
@@ -158,27 +158,26 @@ INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
 -- Bruno
 INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
 (2, DATE '2023-01-01', 'International Waters','Class 4'),
-(2, DATE '2023-01-01', 'Portugal Territorial Waters', 'Class 4'),
-(2, DATE '2023-01-01', 'Portugal EEZ', 'Class 4'),
-(2, DATE '2023-01-01', 'Portugal Internal Waters', 'Class 4'),
-(2, DATE '2023-01-01', 'Douro River', 'Class 3');
+(2, DATE '2023-01-01', 'Portuguese Territorial Sea', 'Class 4'),
+(2, DATE '2023-01-01', 'Portuguese EEZ', 'Class 4');
+
+SELECT * FROM jurisdiction;
 
 -- Bruno, expired certification
 INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
-(2, DATE '2020-01-01', 'Portuguese Internal Waters', 'Class 1');
+(2, DATE '2020-01-01', 'Portuguese Territorial Sea', 'Class 1');
 
 SELECT * FROM Sailor;
 -- Carla
 INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
 (3, DATE '2022-06-15', 'International Waters', 'Class 3'),
-(3, DATE '2022-06-15', 'Spain EEZ', 'Class 3'),
-(3, DATE '2022-06-15', 'Spain Territorial Waters', 'Class 3'),
-(3, DATE '2022-06-15', 'Spain Internal Waters', 'Class 3'),
-(3, DATE '2022-06-15', 'Spain Tejo River', 'Class 3');
+(3, DATE '2022-06-15', 'Spanish EEZ', 'Class 3'),
+(3, DATE '2022-06-15', 'Spanish Territorial Sea', 'Class 3'),
+(3, DATE '2022-06-15', 'Spanish Internal Waters', 'Class 3');
 
 -- Ana (junior)
 INSERT INTO enables(sid, issue_date, jurisdiction_name, class_name) VALUES
-(1, DATE '2024-03-01', 'Portuguese Internal Waters', 'Class 1');
+(1, DATE '2024-03-01', 'Portuguese Territorial Sea', 'Class 1');
 
 ---------------------------------------
 -- Boats (one without class to test NULL class_name)
