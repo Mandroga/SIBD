@@ -1,7 +1,7 @@
 -- 2.4 Simple SQL Queries
 
 -- A. The name of all boats that are used in some trip.
-SELECT b.name, b.cni
+SELECT DISTINCT b.name, b.cni
 FROM Boat AS b
 JOIN Trip AS t ON b.cni = t.cni;
 
@@ -53,4 +53,18 @@ WHERE s.sid = e.sid
 AND e.class_name = b.class_name
 );
 
-
+-- just for analysis
+SELECT DISTINCT sid, first_name, surname, 'not certified' AS certification
+FROM Trip AS t
+JOIN Boat AS b ON t.cni = b.cni
+JOIN Sailor AS s ON t.is_skipper_for_sid = s.sid
+WHERE (s.sid, b.class_name)
+NOT IN (SELECT sid, class_name FROM enables)
+UNION
+SELECT DISTINCT sid, first_name, surname, 'certified' AS certification
+FROM Trip AS t
+JOIN Boat AS b ON t.cni = b.cni
+JOIN Sailor AS s ON t.is_skipper_for_sid = s.sid
+WHERE (s.sid, b.class_name)
+IN (SELECT sid, class_name FROM enables)
+;

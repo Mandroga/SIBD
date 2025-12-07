@@ -232,13 +232,11 @@ CREATE TABLE records(
 CREATE TABLE define(
     long NUMERIC(9,6),
     lat NUMERIC(8,6),
-    name VARCHAR(60),
+    country_name VARCHAR(60),
     PRIMARY KEY (long,lat),
     FOREIGN KEY (long,lat) REFERENCES Location(long,lat),
-    FOREIGN KEY (name) REFERENCES Country(name)
+    FOREIGN KEY (country_name) REFERENCES Country(name)
     -- IC8:
     -- Every country that registers a boat must have
     -- at least one location defined.
 );
-
--- NAZARE
