@@ -42,7 +42,7 @@ CHECK (length <= class_max_length) --IC15
 
 CREATE TABLE Sailor -- IC1
 (
-sid INTEGER,
+sid SERIAL,
 first_name VARCHAR(50) NOT NULL,
 surname VARCHAR(80) NOT NULL,
 email VARCHAR(254) NOT NULL,

@@ -59,12 +59,12 @@ INSERT INTO Location(long, lat, name) VALUES
 ---------------------------------------
 -- Sailors
 ---------------------------------------
-INSERT INTO Sailor(sid, first_name, surname, email) VALUES
-(1, 'Ana',   'Silva',     'ana.silva@example.com'),
-(2, 'Bruno', 'Costa',     'bruno.costa@example.com'),
-(3, 'Carla', 'Ferreira',  'carla.ferreira@example.com'),
-(4, 'Daniel','Pereira',   'daniel.pereira@example.com'),
-(5, 'Eva',   'Santos',    'eva.santos@example.com');
+INSERT INTO Sailor(first_name, surname, email) VALUES
+('Ana',   'Silva',     'ana.silva@example.com'),
+('Bruno', 'Costa',     'bruno.costa@example.com'),
+('Carla', 'Ferreira',  'carla.ferreira@example.com'),
+('Daniel','Pereira',   'daniel.pereira@example.com'),
+('Eva',   'Santos',    'eva.santos@example.com');
 
 -- Specializations
 INSERT INTO Junior_Sailor(sid) VALUES
