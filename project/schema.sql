@@ -94,6 +94,11 @@ CHECK(start_date <= end_date) --IC11
 --- Different reservations that use the same boat can
 --- not have overlapping intervals of start_date and end_date.
 --- (CAN NOT DO IT WITHOUT TRIGGERS - comparing different rows)
+
+--- IC16:
+--- The reservation start_date year must be bigger or equal than
+-- the year the boat used was registered in a country.
+
 );
 
 
