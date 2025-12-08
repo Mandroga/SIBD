@@ -219,10 +219,10 @@ CREATE TABLE International_Jurisdiction(
 
 CREATE TABLE National_Jurisdiction(
 	name VARCHAR(80),
-	belongs_to_iso VARCHAR(5),
+	administrated_by_iso VARCHAR(5),
 	PRIMARY KEY(name),
 	FOREIGN KEY(name) REFERENCES Jurisdiction(name),
-	FOREIGN KEY(belongs_to_iso) REFERENCES Country(iso_code)
+	FOREIGN KEY(administrated_by_iso) REFERENCES Country(iso_code)
 
 );
 
