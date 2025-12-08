@@ -4,9 +4,7 @@ CREATE TABLE Location
 (
 long NUMERIC(9,6),
 lat NUMERIC(8,6),
-name VARCHAR(255) NOT NULL,
-CHECK (long BETWEEN -180 AND 180),
-CHECK (lat BETWEEN -90 AND 90),
+name VARCHAR(255) NOT NULL
 PRIMARY KEY(long, lat)
 );
 
@@ -23,8 +21,7 @@ CREATE TABLE Class(
 	name VARCHAR(80),
 	max_length NUMERIC(6,2) NOT NULL,
 	PRIMARY KEY(name),
-    UNIQUE(name, max_length), -- primary key makes this combination unique, but its written explicitly for the dbms to accept it as a foreign key
-    CHECK(max_length > 0)
+    UNIQUE(name, max_length) -- primary key makes this combination unique, but its written explicitly for the dbms to accept it as a foreign key
 );
 
 CREATE TABLE Boat -- TYPE!
@@ -40,8 +37,7 @@ year INTEGER NOT NULL,
 PRIMARY KEY(cni),
 FOREIGN KEY (class_name, class_max_length) REFERENCES Class(name,max_length),
 FOREIGN KEY (registered_iso) REFERENCES Country(iso_code),
-CHECK (length > 0 AND length <= class_max_length), --IC16
-CHECK (year > 0)
+CHECK (length <= class_max_length) --IC16
 );
 
 CREATE TABLE Sailor -- IC1
@@ -213,8 +209,7 @@ CREATE TABLE enables(
 CREATE TABLE International_Jurisdiction(
 	name VARCHAR(80),
 	PRIMARY KEY(name),
-	FOREIGN KEY(name) REFERENCES Jurisdiction(name),
-    CHECK (name = 'International Waters')
+	FOREIGN KEY(name) REFERENCES Jurisdiction(name)
 );
 
 CREATE TABLE National_Jurisdiction(
@@ -234,8 +229,7 @@ CREATE TABLE records(
     jurisdiction_name VARCHAR(80),
     PRIMARY KEY(cni, start_date, take_off_date, jurisdiction_name),
     FOREIGN KEY(cni, start_date, take_off_date) REFERENCES Trip(cni, start_date, take_off_date),
-    FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name),
-    CHECK (sequence >= 0)
+    FOREIGN KEY(jurisdiction_name) REFERENCES Jurisdiction(name)
     -- Every trip must have at least one jurisdiction recorded
 );
 
