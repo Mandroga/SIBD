@@ -76,7 +76,8 @@ sid INTEGER,
 issue_date DATE,
 expiry_date DATE NOT NULL,
 PRIMARY KEY(sid, issue_date),
-FOREIGN KEY(sid) REFERENCES Sailor(sid)
+FOREIGN KEY(sid) REFERENCES Sailor(sid),
+CHECK (issue_date <= expiry_date)
 -- IC9:
 -- The sailor that is skipper for a trip must
 -- hold a certification for the class of the boat
