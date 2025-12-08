@@ -13,10 +13,10 @@ INSERT INTO International_Jurisdiction(name) VALUES ('Venezuelan EEZ'); -- PROBL
 
 -- National Jurisdiction
                                                                         -- Shouldnt be allowed
-INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('English Internal Waters','SPN'); -- PROBLEM?
-INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('xxx','xxx');
-INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('','');
-INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES ('Venezuelan EEZ','xxx');
+INSERT INTO National_Jurisdiction(name, administrated_by_iso) VALUES ('English Internal Waters','SPN'); -- PROBLEM?
+INSERT INTO National_Jurisdiction(name, administrated_by_iso) VALUES ('xxx','xxx');
+INSERT INTO National_Jurisdiction(name, administrated_by_iso) VALUES ('','');
+INSERT INTO National_Jurisdiction(name, administrated_by_iso) VALUES ('Venezuelan EEZ','xxx');
 
 -- Class
 INSERT INTO Class(name, max_length) VALUES (NULL, NULL);

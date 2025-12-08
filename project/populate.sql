@@ -31,7 +31,7 @@ INSERT INTO International_Jurisdiction(name) VALUES
 ('International Waters');
 
 
-INSERT INTO National_Jurisdiction(name, belongs_to_iso) VALUES
+INSERT INTO National_Jurisdiction(name, administrated_by_iso) VALUES
 ('Portuguese EEZ', 'PRT'),
 ('Portuguese Territorial Sea', 'PRT'),
 ('Spanish EEZ', 'SPN'),
