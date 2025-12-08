@@ -84,7 +84,7 @@ INSERT INTO Certification(sid, issue_date, expiry_date) VALUES
 (2, DATE '2023-01-01', DATE '2026-12-31');
 
 INSERT INTO Certification(sid, issue_date, expiry_date) VALUES -- PROBLEM!
-(1, DATE '2023-01-01', DATE '2022-12-31');
+(1, DATE '2023-01-01', DATE '2024-12-31');
 
 -- Bruno: old expired
 INSERT INTO Certification(sid, issue_date, expiry_date) VALUES

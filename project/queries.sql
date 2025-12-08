@@ -1,17 +1,26 @@
 -- 2.4 Simple SQL Queries
 
 -- A. The name of all boats that are used in some trip.
+SELECT r.name
+FROM
+(
 SELECT DISTINCT b.name, b.cni
 FROM Boat AS b
-JOIN Trip AS t ON b.cni = t.cni;
+JOIN Trip AS t ON b.cni = t.cni
+) AS r;
+
 
 -- B. The name of all boats that are not used in any trip.
+SELECT r.name
+FROM
+(
 SELECT b.name, b.cni
 FROM Boat AS b
 EXCEPT
 SELECT b.name, b.cni
 FROM Boat AS b
-JOIN Trip AS t ON b.cni = t.cni;
+JOIN Trip AS t ON b.cni = t.cni
+) AS r;
 
 -- C. The name of all boats registered in 'PRT' (ISO code) for which at least one responsible for a
 -- reservation has a surname that ends with 'Santos'.
