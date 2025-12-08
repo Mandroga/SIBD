@@ -51,6 +51,8 @@ surname VARCHAR(80) NOT NULL,
 email VARCHAR(254) NOT NULL,
 PRIMARY KEY(sid),
 UNIQUE(email) --IC1
+-- Every sailor must be either Junior or Senior
+-- (CAN NOT BE BOTH)
 );
 
 CREATE TABLE Junior_Sailor
@@ -190,6 +192,8 @@ FOREIGN KEY (end_long, end_lat) REFERENCES Location(long,lat)
 CREATE TABLE Jurisdiction(
 	name VARCHAR(80),
 	PRIMARY KEY(name)
+    -- Every jurisdiction is either International or National
+    -- (CAN NOT BE BOTH)
 );
 
 CREATE TABLE enables(
