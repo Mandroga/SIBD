@@ -22,7 +22,7 @@ SELECT b.name, b.cni, b.registered_iso
 FROM Boat AS b
 JOIN responsible_for AS rf ON  b.cni = rf.cni
 JOIN  Sailor AS s ON rf.responsible_sid = s.sid
-WHERE s.surname = 'Santos'
+WHERE s.surname LIKE '%Santos'
 ) AS b_filtered
 WHERE b_filtered.registered_iso = 'PRT';
 
