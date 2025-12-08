@@ -4,7 +4,7 @@ CREATE TABLE Location
 (
 long NUMERIC(9,6),
 lat NUMERIC(8,6),
-name VARCHAR(255) NOT NULL
+name VARCHAR(255) NOT NULL,
 PRIMARY KEY(long, lat)
 );
 
@@ -37,7 +37,7 @@ year INTEGER NOT NULL,
 PRIMARY KEY(cni),
 FOREIGN KEY (class_name, class_max_length) REFERENCES Class(name,max_length),
 FOREIGN KEY (registered_iso) REFERENCES Country(iso_code),
-CHECK (length <= class_max_length) --IC16
+CHECK (length <= class_max_length) --IC15
 );
 
 CREATE TABLE Sailor -- IC1
@@ -73,7 +73,7 @@ issue_date DATE,
 expiry_date DATE NOT NULL,
 PRIMARY KEY(sid, issue_date),
 FOREIGN KEY(sid) REFERENCES Sailor(sid),
-CHECK (issue_date <= expiry_date)
+CHECK (issue_date <= expiry_date) -- IC17
 -- IC9:
 -- The sailor that is skipper for a trip must
 -- hold a certification for the class of the boat
@@ -88,7 +88,12 @@ end_date DATE NOT NULL,
 PRIMARY KEY(cni, start_date),
 UNIQUE(cni, start_date, end_date), -- primary key makes this combination unique, but its written explicitly for the dbms to accept it as a foreign key
 FOREIGN KEY(cni) REFERENCES Boat(cni),
-CHECK(start_date <= end_date) --IC12
+CHECK(start_date <= end_date) --IC11
+
+--- IC12:
+--- Different reservations that use the same boat can
+--- not have overlapping intervals of start_date and end_date.
+--- (CAN NOT DO IT WITHOUT TRIGGERS - comparing different rows)
 );
 
 
@@ -135,12 +140,25 @@ CHECK(cni = is_skipper_for_cni), --IC5
 CHECK(start_date = is_skipper_for_start_date), --IC5
 CHECK(take_off_date BETWEEN start_date AND end_date), -- IC6
 CHECK(arrival_date BETWEEN start_date AND end_date), --IC6
-CHECK(take_off_date <= arrival_date) -- IC14
+CHECK(take_off_date <= arrival_date) -- IC13
 
 -- IC9:
--- The sailor that is skipper for a trip must
--- hold a certification for the class of the boat
--- used on the reservation which the trip is associated to.
+--- A sailor who is the skipper for a trip must hold,
+-- for every jurisdiction recorded on that trip, a certification that both
+-- (a) enables that jurisdiction and (b) enables a class with max_length
+-- greater or equal than the length of the boat used on the reservation
+-- to which the trip is associated.
+
+
+--- IC10:
+--- The sailor that is skipper for a trip must hold a certification whose
+-- valid period (issue_date to expiry_date) fully covers that trip's duration
+-- (take_off_date to arrival_date).
+
+--- IC14:
+--- Different trips associated to the same reservation must not have overlapping
+--- take_off_date - arrival_date and start_date - end_date intervals.
+--- (NEED TO COMPARE ROWS. NEED TRIGGERS TO DO THAT!)
 );
 
 
