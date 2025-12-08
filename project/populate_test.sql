@@ -4,6 +4,7 @@ INSERT INTO Country(iso_code, name, flag) VALUES ('XXX','Portugal','xxx');
 INSERT INTO Country(iso_code, name, flag) VALUES ('', '',''); -- PROBLEM!
 -- We need to check if its empty string, do we need to check if its a valid ISO, name or link ?
 
+SELECT * FROM Location;
 -- Jurisdiction
 INSERT INTO Jurisdiction(name) VALUES (''); -- PROBLEM?
 
@@ -32,6 +33,8 @@ INSERT INTO Location(long, lat, name) VALUES (90, 180, '');
 INSERT INTO Location(long, lat, name) VALUES (-90, -180, '');
 INSERT INTO Location(long, lat, name) VALUES (-100, 180, '');
 INSERT INTO Location(long, lat, name) VALUES (-90, 190, ''); -- PROBLEM!
+INSERT INTO Location(long, lat, name) VALUES (-91, 190, ''); -- PROBLEM!
+
 INSERT INTO Location(long, lat, name) VALUES (-16.000000, 32.650000, 'Madeira Marina2');
 INSERT INTO Location(long, lat, name) VALUES (-16.0000001, 32.650000, 'Madeira Marina2');
 

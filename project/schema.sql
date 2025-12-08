@@ -5,7 +5,9 @@ CREATE TABLE Location
 long NUMERIC(8,6),
 lat NUMERIC(9,6),
 name VARCHAR(255) NOT NULL,
-PRIMARY KEY(long, lat)
+PRIMARY KEY(long, lat),
+CHECK (long BETWEEN -90 AND 90),
+CHECK (lat BETWEEN -180 AND 180)
 );
 
 CREATE TABLE Country(
@@ -21,7 +23,8 @@ CREATE TABLE Class(
 	name VARCHAR(80),
 	max_length NUMERIC(6,2) NOT NULL,
 	PRIMARY KEY(name),
-    UNIQUE(name, max_length) -- primary key makes this combination unique, but its written explicitly for the dbms to accept it as a foreign key
+    UNIQUE(name, max_length), -- primary key makes this combination unique, but its written explicitly for the dbms to accept it as a foreign key
+    CHECK(max_length BETWEEN 0 AND 1000)
 );
 
 CREATE TABLE Boat -- TYPE!
@@ -204,7 +207,8 @@ CREATE TABLE enables(
 CREATE TABLE International_Jurisdiction(
 	name VARCHAR(80),
 	PRIMARY KEY(name),
-	FOREIGN KEY(name) REFERENCES Jurisdiction(name)
+	FOREIGN KEY(name) REFERENCES Jurisdiction(name),
+    CHECK (name LIKE 'International Waters')
 );
 
 CREATE TABLE National_Jurisdiction(
